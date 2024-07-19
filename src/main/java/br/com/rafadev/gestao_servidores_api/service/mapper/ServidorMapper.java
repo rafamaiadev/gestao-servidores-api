@@ -5,7 +5,7 @@ import br.com.rafadev.gestao_servidores_api.domain.dto.request.ServidorUpdate;
 import br.com.rafadev.gestao_servidores_api.domain.dto.response.ServidorResponse;
 import br.com.rafadev.gestao_servidores_api.domain.model.Especializacao;
 import br.com.rafadev.gestao_servidores_api.domain.model.Servidor;
-import br.com.rafadev.gestao_servidores_api.service.EspecializacaoService;
+import br.com.rafadev.gestao_servidores_api.service.impl.EspecializacaoServiceImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,10 +14,10 @@ import java.util.Objects;
 @Component
 public class ServidorMapper {
 
-    private final EspecializacaoService especializacaoService;
+    private final EspecializacaoServiceImpl especializacaoServiceImpl;
 
-    public ServidorMapper(EspecializacaoService especializacaoService) {
-        this.especializacaoService = especializacaoService;
+    public ServidorMapper(EspecializacaoServiceImpl especializacaoServiceImpl) {
+        this.especializacaoServiceImpl = especializacaoServiceImpl;
     }
 
     public Servidor toEntity(ServidorCreate servidorCreate) {
@@ -57,7 +57,7 @@ public class ServidorMapper {
     }
 
     public ServidorResponse toDTO(Servidor servidor) {
-        List<Especializacao> especializacoes = especializacaoService.findAllByServidor(servidor);
+        List<Especializacao> especializacoes = especializacaoServiceImpl.findAllByServidor(servidor);
 
         return new ServidorResponse(
                 servidor.getId(),

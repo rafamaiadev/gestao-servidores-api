@@ -5,7 +5,7 @@ import br.com.rafadev.gestao_servidores_api.domain.dto.request.ServidorUpdate;
 import br.com.rafadev.gestao_servidores_api.domain.dto.response.ServidorResponse;
 import br.com.rafadev.gestao_servidores_api.domain.model.Servidor;
 import br.com.rafadev.gestao_servidores_api.repository.ServidorRepository;
-import br.com.rafadev.gestao_servidores_api.service.ServidorService;
+import br.com.rafadev.gestao_servidores_api.service.impl.ServidorServiceImpl;
 import br.com.rafadev.gestao_servidores_api.service.mapper.ServidorMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,12 @@ import java.util.List;
 @RequestMapping("/servidores")
 public class ServidorController {
 
-    private final ServidorService servidorService;
+    private final ServidorServiceImpl servidorServiceImpl;
     private final ServidorMapper servidorMapper;
     private final ServidorRepository servidorRepository;
 
-    public ServidorController(ServidorService servidorService, ServidorMapper servidorMapper, ServidorRepository servidorRepository) {
-        this.servidorService = servidorService;
+    public ServidorController(ServidorServiceImpl servidorServiceImpl, ServidorMapper servidorMapper, ServidorRepository servidorRepository) {
+        this.servidorServiceImpl = servidorServiceImpl;
         this.servidorMapper = servidorMapper;
         this.servidorRepository = servidorRepository;
     }
@@ -32,7 +32,7 @@ public class ServidorController {
     public ResponseEntity<ServidorResponse> create(@RequestBody @Valid ServidorCreate servidorCreate) {
 
         Servidor servidor = servidorMapper.toEntity(servidorCreate);
-        servidorService.save(servidor);
+        servidorServiceImpl.save(servidor);
         ServidorResponse servidorResponse = servidorMapper.toDTO(servidor);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(servidorResponse);
@@ -40,7 +40,7 @@ public class ServidorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ServidorResponse> update(@PathVariable Long id,@RequestBody ServidorUpdate servidorUpdate) {
-        Servidor servidor = servidorService.findById(id);
+        Servidor servidor = servidorServiceImpl.findById(id);
 
         servidorMapper.updateEntity(servidorUpdate, servidor);
 
@@ -54,7 +54,7 @@ public class ServidorController {
     @GetMapping
     public ResponseEntity<List<ServidorResponse>> findAll() {
 
-        List<Servidor> servidores =  servidorService.findAll();
+        List<Servidor> servidores =  servidorServiceImpl.findAll();
         List<ServidorResponse> servidoresResponse = servidores.stream()
                 .map(servidorMapper::toDTO)
                 .toList();
@@ -65,7 +65,7 @@ public class ServidorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
 
-        servidorService.delete(id);
+        servidorServiceImpl.delete(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

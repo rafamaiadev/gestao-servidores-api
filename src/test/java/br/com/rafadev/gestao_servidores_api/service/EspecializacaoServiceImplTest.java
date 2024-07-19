@@ -5,6 +5,7 @@ import br.com.rafadev.gestao_servidores_api.domain.enums.StatusEspecializacao;
 import br.com.rafadev.gestao_servidores_api.domain.model.Especializacao;
 import br.com.rafadev.gestao_servidores_api.domain.model.Servidor;
 import br.com.rafadev.gestao_servidores_api.repository.EspecializacaoRepository;
+import br.com.rafadev.gestao_servidores_api.service.impl.EspecializacaoServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class EspecializacaoServiceTest {
+public class EspecializacaoServiceImplTest {
 
     @Mock
     private EspecializacaoRepository especializacaoRepository;
@@ -27,7 +28,7 @@ public class EspecializacaoServiceTest {
     private EmailService emailService;
 
     @InjectMocks
-    private EspecializacaoService especializacaoService;
+    private EspecializacaoServiceImpl especializacaoServiceImpl;
 
     private Especializacao especializacao;
 
@@ -48,7 +49,7 @@ public class EspecializacaoServiceTest {
         when(especializacaoRepository.findById(1L)).thenReturn(Optional.of(especializacao));
         when(especializacaoRepository.save(especializacao)).thenReturn(especializacao);
 
-        Especializacao result = especializacaoService.aprovarEspecializacao(1L);
+        Especializacao result = especializacaoServiceImpl.aprovarEspecializacao(1L);
 
         assertEquals(StatusEspecializacao.APROVADO, result.getStatus());
 
@@ -68,7 +69,7 @@ public class EspecializacaoServiceTest {
         when(especializacaoRepository.findById(1L)).thenReturn(Optional.of(especializacao));
         when(especializacaoRepository.save(especializacao)).thenReturn(especializacao);
 
-        Especializacao result = especializacaoService.reprovarEspecializacao(1L, motivo);
+        Especializacao result = especializacaoServiceImpl.reprovarEspecializacao(1L, motivo);
 
         assertEquals(StatusEspecializacao.REPROVADO, result.getStatus());
         assertEquals(motivo, result.getMotivoIndeferimento());
