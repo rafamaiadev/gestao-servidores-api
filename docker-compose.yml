@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=gestao-servidores
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: on-failure
+    volumes:
+      - gestao-servidores-data:/var/lib/postgresql/data
+
+  gestao-servidores-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      MAIL_USERNAME: app@gmail.com
+      MAIL_PASSWORD: password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gestao-servidores
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    restart: on-failure
+
+volumes:
+  gestao-servidores-data:
